@@ -1,4 +1,4 @@
-export default {
+module.exports = {
     serverUrl: "http://localhost:8082",
 
     // Node name, must be unique across all nodes
