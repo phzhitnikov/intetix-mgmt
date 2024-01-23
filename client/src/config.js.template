@@ -1,0 +1,12 @@
+export default {
+    serverUrl: "http://localhost:8082",
+
+    // Node name, must be unique across all nodes
+    node: "node-1",
+
+    // Initial state: blank / standby_video / standby_image
+    initial: "blank",
+
+    // filename of initial content. E.g., standby.jpg / standby.mp4
+    initialContent: "standby.jpg"
+};
