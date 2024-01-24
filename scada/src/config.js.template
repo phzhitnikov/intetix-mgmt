@@ -1,6 +1,8 @@
 export default {
-    // server_url: "http://intetix-mgmt-server:8082",
     serverUrl: "http://localhost:8082",
+
+    // Node name, must be unique across all nodes.
+    // Match it with scadaNode parameter in server project's config
     node: "scada",
 
     nodes: [
