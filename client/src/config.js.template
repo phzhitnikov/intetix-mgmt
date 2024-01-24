@@ -7,6 +7,6 @@ export default {
     // Initial state: blank / standby_video / standby_image
     initial: "blank",
 
-    // filename of initial content. E.g., standby.jpg / standby.mp4
+    // Filename of initial content. E.g., standby.jpg / standby.mp4
     initialContent: "standby.jpg"
 };

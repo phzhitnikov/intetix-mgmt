@@ -1,8 +1,25 @@
-# Requirements:
-1) For client: Chrome / Chromium removed autoplay-policy flag, so video autoplay is not available.
-   Use Thorium browser
+# Overview
+Project consists of several subprojects:
+- server - master node that help other nodes to communicate with each other
+- scada - web-service for controlling the nodes through the browser (reboot node / halt node / run content)
+- client-system - slave node that handles the halt/reboot commands on node where it runs
+- client - slave node that can show content (image/videos)
 
+# Requirements:
+1) For client: use Thorium browser (Chromium fork), because Chrome/Chromium removed autoplay-policy flag, 
+   so video autoplay is not available.
+   
 2) Scada can be opened in any browser basically
+
+# Configuration
+1) For server node set the static IP address or domain name
+2) For each node, prepare config.js:
+   - set `serverUrl` matching your server address
+   - set unique `nodeName` for each node
+   - set other config parameters, see comments in config.js
+3) For client, copy your content files to `images` or `videos` folder
+   
+- [//]: # (TODO: overview of scada config)
 
 # Scada installation
 1) Install [Node v16](https://nodejs.org/download/release/v16.20.2/)
