@@ -2,6 +2,9 @@
   "name": "intetix-mgmt-client-system",
   "version": "1.0.0",
   "main": "index.js",
+  "scripts": {
+    "start": "node index.js"
+  },
   "author": "Filipp Zhitnikov [phzhitnikov@gmail.com]",
   "license": "MIT",
   "dependencies": {
