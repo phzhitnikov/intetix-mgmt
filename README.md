@@ -37,7 +37,7 @@ Project consists of several subprojects:
 3) Transfer `dist` folder on target PC
 4) On target PC, install serve package: `npm install -G serve`
 5) On target PC,
-   run: `start <thorium path> --noerrdialogs --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required --kiosk --app="http://127.0.0.1:3000/" && npx serve dist`
+   run: `start <thorium path> --disable-features=Translate --no-first-run --noerrdialogs --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required -disable-pinch --kiosk --app="http://127.0.0.1:3000/" && npx serve dist`
 
 # Client-system / server installation
 1) Install [Node v18](https://nodejs.org/download/release/v18.19.0/)
