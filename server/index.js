@@ -41,6 +41,8 @@ io.on('connect', function (socket) {
         // Find node name in mapping
         let nodeName = nodesOnline[socket.id];
         if (nodeName) {
+            console.log("Node disconnected:", nodeName);
+
             // Tell the scada to update node's online status
             if (nodeName !== config.scadaNode)
                 updateOnlineStatus(nodeName, false);

@@ -12,6 +12,11 @@ export default {
             position: {x: "48%", y: "72%"}
         },
         {
+            name: "showcase-2",
+            title: "Витрина 2",
+            position: {x: "47%", y: "18%"}
+        },
+        {
             name: "stove",
             title: "Печка",
             position: {x: "65%", y: "72%"}
@@ -25,8 +30,8 @@ export default {
             ]
         },
         {
-            name: "cabinet",
-            title: "Шкаф",
+            name: "library",
+            title: "Библиотека",
             position: {x: "70%", y: "62%"}
         },
         {
@@ -35,7 +40,6 @@ export default {
             position: {x: "74%", y: "43%"},
             actions: [
                 {name: "play_video", arg: {name: "video.mp4"}, icon: "fa-video", help_text: "Запустить видео X"},
-                {name: "reset", icon: "fa-window-close", help_text: "Сброс"}
             ]
         },
         {
@@ -52,14 +56,9 @@ export default {
             position: {x: "53.5%", y: "47%"}
         },
         {
-            name: "painting",
-            title: "Картина с пейзажами",
+            name: "molbert",
+            title: "Мольберт",
             position: {x: "45%", y: "40%"}
-        },
-        {
-            name: "showcase-2",
-            title: "Витрина 2",
-            position: {x: "47%", y: "18%"}
         },
         {
             name: "model",
@@ -67,8 +66,8 @@ export default {
             position: {x: "38%", y: "28%"}
         },
         {
-            name: "grass-book",
-            title: "Книга с травами",
+            name: "interactive-book",
+            title: "Интерактивная книга",
             position: {x: "30%", y: "38%"}
         }
     ]
