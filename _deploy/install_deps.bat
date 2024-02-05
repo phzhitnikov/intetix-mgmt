@@ -1,3 +1,3 @@
-npm install
-npm install -G serve
-npm run build
+call npm install
+call npm install -G serve
+call npm run build
