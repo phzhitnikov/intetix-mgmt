@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <div v-for="node in nodes">
       <PowerControl
+          v-for="node in nodes"
+
           :name="node.name"
           :title="node.title"
           :actions="node.actions"
@@ -9,8 +9,6 @@
           :is-online="onlineStatuses[node.name] ?? false"
           @action="onControlAction"
       />
-    </div>
-  </div>
 </template>
 
 <script>
@@ -62,10 +60,4 @@ export default {
 </script>
 
 <style>
-body {
-  background-image: url("@/assets/background.jpg");
-  background-repeat: no-repeat;
-  background-position: center;
-  background-size: 95%;
-}
 </style>

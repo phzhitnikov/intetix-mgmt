@@ -51,7 +51,7 @@ export default {
             ]
         },
         {
-            name: "game-floor",
+            name: "gaming-floor",
             title: "Игровой пол",
             position: {x: "53.5%", y: "47%"}
         },
