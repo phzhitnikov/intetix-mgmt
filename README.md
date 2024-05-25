@@ -1,7 +1,7 @@
 # Overview
 Project consists of several subprojects:
 - server - master node that help other nodes to communicate with each other
-- scada - web-service for controlling the nodes through the browser (reboot node / halt node / run content)
+- scada - web-service for controlling the nodes through the browser (reboot/halt/sleep/wake node, run content)
 - client-system - slave node that handles the halt/reboot commands on the device where it runs on
 - client - slave node that can show content (image/videos)
 
@@ -15,7 +15,7 @@ Project consists of several subprojects:
 1) For server node set the static IP address or domain name
 2) For each node, prepare config.js:
    - set `serverUrl` matching your server address
-   - set unique `nodeName` for each node
+   - set unique `nodeName` for each node. NB: `broadcast` name is reserved
    - set other config parameters, see comments in config.js
 3) For client, copy your content files to `images` or `videos` folder
    
@@ -43,3 +43,28 @@ Project consists of several subprojects:
 1) Install [Node v18](https://nodejs.org/download/release/v18.19.0/)
 2) Install dependencies: `npm install`
 3) Run project: `npm start`
+
+# Configure Wake-on-LAN (WLAN) for client-system 
+- PC needs to be powered from AC, not from battery
+- Network adapter -> Properties -> Advanced -> Allow all settings about WoL
+- Network adapter -> Properties -> Power Management -> Allow this device to wake the computer
+- In BIOS - allow all settings about WoL
+
+# Disable sign-in on wake
+- Run CMD in admin mode
+- Run `powercfg /SETACVALUEINDEX SCHEME_CURRENT SUB_NONE CONSOLELOCK 0`
+- Reboot the PC
+
+
+# Конфиги
+- showcase-1 - Витрина 1 (включение, перезагрузка)
+- showcase-2 - Витрина 2 (включение, перезагрузка)
+- stove - Печка (включение, перезагрузка, автозапуск видео standby.mp4)
+- bolotov-painting - Картина Болотова (включение, перезагрузка, автозапуск видео standby.mp4, запуск контента video.mp4)
+- library - Библиотека (включение, перезагрузка)
+- children-theatre - Детский театр (включение, перезагрузка, автозапуск видео standby.mp4, запуск контента video.mp4)
+- park-organizer - Устроитель парков (включение, перезагрузка, автозапуск видео standby.mp4, запуск контента video.mp4)
+- gaming-floor - Игровой пол (включение, перезагрузка)
+- molbert - Мольберт (включение, перезагрузка, автозапуск видео standby.mp4)
+- model - Макет (включение, перезагрузка)
+- interactive-book - Интерактивная книга (включение, перезагрузка)

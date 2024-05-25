@@ -6,54 +6,46 @@
           :title="node.title"
           :actions="node.actions"
           :style="{left: node.position.x, top: node.position.y}"
-          :is-online="onlineStatuses[node.name] ?? false"
+          :is-online="getOnline(node.name)"
           @action="onControlAction"
       />
 </template>
 
 <script>
 import PowerControl from "@/components/PowerControl.vue"
-import {io} from "socket.io-client";
 import config from "@/config.js";
 
 export default {
   components: {PowerControl},
 
   created() {
-    // Connect to server
-    this.socket = io(config.serverUrl, {transports: ["websocket"]});
-    this.socket.on("connect", () => {
-      console.log("Connected to server");
-
-      // Present yourself to server
-      this.socket.emit('join', config.node);
-    });
-
-    // Handle node connect/disconnect events
-    this.socket.on("online", (nodeName, value, clear) => {
-      console.log("Got online update:", nodeName, value);
-
-      // Special option to clear all online statuses first
-      if (clear)
-        this.onlineStatuses = {};
-
-      this.onlineStatuses[nodeName] = value;
-    })
   },
 
   data() {
     return {
       nodes: config.nodes,
-      onlineStatuses: {},
     }
   },
 
+  computed: {
+    onlineStatuses() { return this.$store.onlineStatuses; }
+  },
+
   methods: {
+    getOnline(nodeName) {
+      if (nodeName === 'broadcast') {
+        // If any node in system is online, show broadcast node's status as online
+        return Object.values(this.onlineStatuses).some(val => val === true);
+      }
+
+      return this.onlineStatuses[nodeName] ?? false;
+    },
+
     onControlAction(node, action, argument) {
       console.log("Sending action:", node, action, argument);
 
       let packet = {"node": node, "action": action, "arg": argument}
-      this.socket.emit("control", packet);
+      this.$socket.emit("control", packet);
     }
   }
 }

@@ -12,49 +12,57 @@ function runCommand(command) {
 }
 
 function reboot() {
-    let command;
-
-    // Choose the appropriate command based on the operating system
     switch (os.platform()) {
         case 'win32':
-            command = 'shutdown /r /t 0';
+            runCommand('shutdown /r /t 0');
             break;
 
         case 'darwin':
         case 'linux':
-            command = 'sudo shutdown -r now';
+            runCommand('sudo shutdown -r now');
             break;
 
         default:
             console.error('Unsupported operating system for reboot');
             return;
     }
-
-    // Execute the chosen command
-    runCommand(command);
 }
 
 function halt() {
-    let command;
-
-    // Choose the appropriate command based on the operating system
     switch (os.platform()) {
         case 'win32':
-            command = 'shutdown /s /t 0';
+            runCommand('shutdown /s /t 0');
             break;
 
         case 'darwin':
         case 'linux':
-            command = 'sudo shutdown -h now';
+            runCommand('sudo shutdown -h now');
             break;
 
         default:
             console.error('Unsupported operating system for halt');
             return;
     }
-
-    // Execute the chosen command
-    runCommand(command);
 }
 
-module.exports = { reboot, halt }
+function sleep() {
+    switch (os.platform()) {
+        case 'win32':
+            runCommand("powershell.exe -Command \"& {Add-Type -Assembly System.Windows.Forms;[System.Windows.Forms.Application]::SetSuspendState('Suspend', $false, $false)}\"");
+            break;
+
+        case 'darwin':
+            runCommand('pmset sleepnow');
+            break;
+
+        case 'linux':
+            runCommand('systemctl suspend');
+            break;
+
+        default:
+            console.error('Unsupported operating system for sleep');
+            return;
+    }
+}
+
+module.exports = { reboot, halt, sleep }

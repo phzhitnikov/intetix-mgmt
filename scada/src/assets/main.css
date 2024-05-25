@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+* {
+  /*Disables double tap to zoom*/
+  touch-action: manipulation;
+}
+
+html, body {
+  overscroll-behavior: none;
+  user-select: none;
+}
+
 body {
   background-color: black;
   transition: color 0.5s, background-color 0.5s;
@@ -15,6 +25,7 @@ body {
 }
 
 #app {
+  width: 1920px;
   height: 1080px;
   font-weight: normal;
   position: relative;

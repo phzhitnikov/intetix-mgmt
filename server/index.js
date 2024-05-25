@@ -1,71 +1,97 @@
 const Server = require("socket.io").Server;
+const wol = require('wake_on_lan');
+
 const utils = require('./utils.js');
 const config = require('./config.js');
+const {ClientManager} = require("./client_manager");
 
 const io = new Server({transports: ["websocket"]});
 
 // socket_id -> node_name mapping
 let nodesOnline = {};
 
-function updateOnlineStatus(nodeName, status, clear = false) {
-    io.to(config.scadaNode).emit("online", nodeName, status, clear);
+let clientManager = new ClientManager(io, config.scadaNode);
+
+function send(dest, action, arg) {
+    switch (action) {
+        case "wakeup":
+            // Send Wake-on-LAN packet to node's mac address
+            let mac = config.macs[dest];
+            if (!mac) {
+                console.error(`No MAC address found for node group: ${dest}. Check config`);
+                break;
+            }
+
+            wol.wake(mac, {address: config.lanBroadcastAddress}, (error) => {
+                if (error) {
+                    console.error(`Failed to send WoL packet to ${mac}:`, error);
+                } else {
+                    console.log(`Sent WoL packet to ${mac}`);
+                }
+            });
+            break;
+
+        default:
+            // Resend packet to node group
+            console.log(`[${dest}] <- ${action} ${JSON.stringify(arg)}`)
+            io.to(dest).emit(action, arg);
+    }
 }
 
 io.on('connect', function (socket) {
     console.log("Client connected: ", socket.id);
 
+    // For usage in logs
+    let sender = socket.id
+
+    let log = (...msg) => { console.log(`[${sender}]`, ...msg) };
+    let log_error = (...msg) => { console.error(`[${sender}]`, ...msg) };
+
     // Assign specific room to client. Room = node name
-    socket.on('join', (nodeName) => {
-        console.log("Node connected:", nodeName);
-        socket.join(nodeName);
+    socket.on('join', (rawNodeName) => {
+        let node = clientManager.add(socket.id, rawNodeName);
+        sender = node.fullName
+        log("Node connected");
 
-        // If scada was connected, report all online nodes
-        if (nodeName === config.scadaNode) {
-            // First, clear online mapping in scada node
-            updateOnlineStatus(config.scadaNode, true, true);
+        // Join room for node group
+        socket.join(node.group);
 
-            // Tell the scada online statuses of all regular (non-scada) nodes
-            for (const nodeName of Object.values(nodesOnline).filter(v => v !== config.scadaNode)) {
-                updateOnlineStatus(nodeName, true);
-            }
-        }
-        // If regular node connected, tell the scada to update node's online status
-        else {
-            nodesOnline[socket.id] = nodeName;
-            updateOnlineStatus(nodeName, true);
+        // If scada was connected,
+        if (node.name === config.scadaNode) {
+            // - report all online nodes
+            clientManager.informScada();
         }
     });
 
     // Handle disconnection
     socket.on('disconnecting', () => {
-        // Find node name in mapping
-        let nodeName = nodesOnline[socket.id];
-        if (nodeName) {
-            console.log("Node disconnected:", nodeName);
-
-            // Tell the scada to update node's online status
-            if (nodeName !== config.scadaNode)
-                updateOnlineStatus(nodeName, false);
-
-            // Update nodes map
-            delete nodesOnline[socket.id];
-        }
+        clientManager.remove(socket.id)
     })
 
     // Handle messages from scada page
     socket.on('control', (packet) => {
-        console.log('Received control packet:', packet);
+        log('Received control packet:', packet);
 
-        // Parse the packet and resend to client
-        let parsed = utils.parsePacket(packet);
-        if (parsed) {
-            socket.to(parsed["node"]).emit(parsed["action"], parsed["arg"])
+        // Validate the packet
+        let p = utils.parsePacket(packet, "node", "action");
+        if (!p) return;
+
+        // Send the same action to all connected nodes
+        if (p.node.group === "broadcast") {
+            clientManager.clients.forEach(node => send(node.group, p.action, p.arg));
+        } else {
+            send(p.node.group, p.action, p.arg);
         }
     });
 
     // Handle error events from nodes
     socket.on('error', (message) => {
-        console.error("Got error:", message);
+        log_error("Got error:", message);
+    });
+
+    // Default handler
+    socket.on('message', (message) => {
+        log("Received message:", message);
     });
 });
 

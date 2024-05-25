@@ -4,6 +4,6 @@ module.exports = {
     // Node name, must be unique across all nodes
     node: "node-2",
 
-    // debug / production. In debug reboot & halt actions are disabled
-    mode: "debug"
+    // In debug reboot/halt/sleep actions are disabled
+    debugMode: false
 };

@@ -1,27 +1,33 @@
-// Packet schema:
-// {
-//   "node": "node1",
-//   "action": "play_video",
-//   "arg": "arg1" - optional
-// }
-//
-// Available actions:
-// - reboot - reboot the client
-// - halt - power off the client
-// - play_video - play specific video on client
-// - reset - reset client
-function parsePacket(packet) {
-    if (typeof packet !== "object")
-        return;
+/**
+ *
+ * @param {Object} packet
+ * @param {...String} keys
+ * @returns {Object|boolean}
+ */
 
-    // Simple validation: check for keys in object
-    packet["arg"] = packet["arg"] || null;
-    if (["node", "action", "arg"]
-        .every((key) => key in packet)) {
-        return packet;
+const {Node} = require("./client_manager");
+
+// TODO: pass schema {node: String, action: String, arg: Object}
+function parsePacket(packet, ...keys) {
+    if (typeof packet !== "object")
+        return false;
+
+    // arg is optional
+    packet["arg"] = packet["arg"] ?? null;
+
+    let isValid = keys.every((key) => key in packet);
+    if (!isValid) {
+        console.log("Invalid packet:", packet);
+        return false;
     }
 
-    console.log("Unknown packet format:", packet);
+    // Insert node object
+    if ('node' in packet) {
+        let nodeName = packet['node'];
+        packet['node'] = new Node(nodeName);
+    }
+
+    return packet;
 }
 
 module.exports = { parsePacket }
