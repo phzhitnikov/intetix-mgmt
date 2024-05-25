@@ -1,0 +1,5 @@
+:3000
+
+log
+root * dist
+file_server

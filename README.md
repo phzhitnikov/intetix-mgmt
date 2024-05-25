@@ -10,6 +10,8 @@ Project consists of several subprojects:
    so video autoplay is not available.
    
 2) Scada can be opened in any browser basically
+3) For client & scada: install [Caddy Server](https://caddyserver.com/download)
+4) For client: install video codecs
 
 # Configuration
 1) For server node set the static IP address or domain name
@@ -22,7 +24,7 @@ Project consists of several subprojects:
 - [//]: # (TODO: overview of scada config)
 
 # Scada installation
-1) Install [Node v18](https://nodejs.org/download/release/v18.19.0/) on both build & target PC
+1) Install [Node v20](https://nodejs.org/dist/v20.13.1/node-v20.13.1-x64.msi) on both build & target PC
 2) Install dependencies and create build: `npm install && npm run build`
 3) Transfer `dist` folder on target PC
 4) On target PC, install serve package: `npm install -G serve`
@@ -34,10 +36,10 @@ Project consists of several subprojects:
     - [Node v18](https://nodejs.org/download/release/v18.19.0/)
     - [Thorium Browser](https://thorium.rocks/)
 2) From project folder, install dependencies and create build: `npm install && npm run build`
-3) Transfer `dist` folder on target PC
-4) On target PC, install serve package: `npm install -G serve`
+3) Transfer `dist` folder and `Caddyfile`  on target PC 
+4) On target PC, run server: `caddy run`
 5) On target PC,
-   run: `start <thorium path> --disable-features=Translate --no-first-run --noerrdialogs --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required -disable-pinch --kiosk --app="http://127.0.0.1:3000/" && npx serve dist`
+   run: `start chrome --disable-features=Translate --no-first-run --noerrdialogs --hide-crash-restore-bubble --autoplay-policy=no-user-gesture-required -disable-pinch --kiosk --app="http://localhost:3000/"`
 
 # Client-system / server installation
 1) Install [Node v18](https://nodejs.org/download/release/v18.19.0/)
