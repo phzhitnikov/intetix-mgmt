@@ -1,11 +1,10 @@
 <template>
   <div class="content" ref="content">
-    <video id="videoPlayer" class="video-js"></video>
+    <video id="videoPlayer"></video>
   </div>
 </template>
 
 <script>
-import videojs from 'video.js';
 import io from "socket.io-client";
 
 import config from '@/config.js'
@@ -36,52 +35,45 @@ export default {
     });
 
     // Handle reset command
-    this.socket.on('reset', (args) => {
-      console.log('Received reset command:', args);
+    this.socket.on('reset', () => {
+      console.log('Received reset command');
       this.reset();
     });
   },
 
   mounted() {
-    this.player = videojs(
-        "videoPlayer",
-        {controls: false, errorDisplay: false},
-        () => {
-          this.videoPlayer = document.getElementById("videoPlayer");
-          this.reset();
-          console.log(this.player.tag);
-        });
+    this.videoPlayer = document.getElementById("videoPlayer");
 
     // Show/hide player when player started/finished the playback
-    this.player.on('play', () => {
+    this.videoPlayer.addEventListener('play', (event) => {
       this.hideImage();
       this.showPlayer(true);
     });
 
-    this.player.on('ended', () => {
+    this.videoPlayer.addEventListener('ended', (event) => {
       this.reset();
     });
 
-    this.player.on('error', () => {
-      let error = {node: config.node, error: this.player.error()};
+    this.videoPlayer.addEventListener('error', (event) => {
+      let error = {node: config.node, error: event};
       console.error("Got error", error);
       this.socket.emit('error', error);
-    });
-  },
 
-  beforeDestroy() {
-    if (this.player) {
-      this.player.dispose();
-    }
+      this.reset();
+    });
+
+    // Load initial content
+    this.reset();
   },
 
   methods: {
     playVideo(filename, loop = false) {
       let source = "/videos/" + filename;
 
-      this.player.src(source);
-      this.player.loop(loop);
-      this.player.play();
+      this.videoPlayer.src = source;
+      this.videoPlayer.loop = loop;
+      this.videoPlayer.load();
+      this.videoPlayer.play();
     },
 
     showImage(filename) {
@@ -102,7 +94,6 @@ export default {
     reset() {
       this.hideImage();
       this.showPlayer(false);
-      this.player.reset();
 
       // Select default behaviour
       switch (config.initial) {
@@ -123,15 +114,13 @@ export default {
 </script>
 
 <style>
-@import 'video.js/dist/video-js.css';
-
 .content {
   width: 100%;
   height: 100%;
   background-size: cover;
 }
 
-.video-js {
+#videoPlayer {
   width: 100vw;
   height: 100vh;
 }
