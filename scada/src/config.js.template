@@ -7,39 +7,51 @@ export default {
 
     nodes: [
         {
+            name: "broadcast",
+            title: "Общее управление",
+            position: {x: "5%", y: "5%"}
+        },
+        {
             name: "showcase-1",
             title: "Витрина 1",
-            position: {x: "48%", y: "72%"}
+            position: {x: "48%", y: "78%"}
         },
         {
             name: "showcase-2",
             title: "Витрина 2",
-            position: {x: "47%", y: "18%"}
+            position: {x: "47%", y: "14%"}
         },
         {
             name: "stove",
             title: "Печка",
-            position: {x: "65%", y: "72%"}
+            position: {x: "75%", y: "80%"}
         },
         {
             name: "bolotov-painting",
             title: "Картина Болотова",
-            position: {x: "76%", y: "72%"},
+            position: {x: "86%", y: "80%"},
             actions: [
-                {name: "play_video", arg: {name: "video.mp4"}, icon: "fa-video", help_text: "Запустить видео X"}
+                {name: "play_video", arg: {name: "video.mp4"}, icon: "fa-video", help_text: "Запустить видео X"},
+                {name: "reset", icon: "fa-close", help_text: "Сброс"},
             ]
         },
         {
             name: "library",
             title: "Библиотека",
-            position: {x: "70%", y: "62%"}
+            position: {x: "83%", y: "69%"}
         },
         {
             name: "children-theatre",
             title: "Детский театр",
-            position: {x: "74%", y: "43%"},
+            position: {x: "84%", y: "43%"},
             actions: [
-                {name: "play_video", arg: {name: "video.mp4"}, icon: "fa-video", help_text: "Запустить видео X"},
+                {
+                    name: "play_video",
+                    arg: {name: "video.mp4", loop: true},
+                    icon: "fa-video",
+                    help_text: "Запустить зацикленное видео"
+                },
+                {name: "reset", icon: "fa-close", help_text: "Сброс"},
             ]
         },
         {
@@ -47,7 +59,13 @@ export default {
             title: "Устроитель парков",
             position: {x: "63%", y: "40%"},
             actions: [
-                {name: "play_video", arg: {name: "video.mp4"}, icon: "fa-video", help_text: "Запустить видео X"}
+                {
+                    name: "play_video",
+                    arg: {name: "video.mp4", loop: true},
+                    icon: "fa-video",
+                    help_text: "Запустить зацикленное видео"
+                },
+                {name: "reset", icon: "fa-close", help_text: "Сброс"},
             ]
         },
         {
@@ -63,12 +81,12 @@ export default {
         {
             name: "model",
             title: "Макет",
-            position: {x: "38%", y: "28%"}
+            position: {x: "33%", y: "26%"}
         },
         {
             name: "interactive-book",
             title: "Интерактивная книга",
-            position: {x: "30%", y: "38%"}
+            position: {x: "21%", y: "38%"}
         }
     ]
 };
