@@ -1,0 +1,22 @@
+module.exports = {
+    scadaNode: "scada",
+    port: "8082",
+
+    // Mapping "node name -> MAC address"
+    macs: {
+        "showcase-1": "",
+        "showcase-2": "",
+        "stove": "",
+        "bolotov-painting": "",
+        "library": "",
+        "children-theatre": "",
+        "park-organizer": "",
+        "gaming-floor": "",
+        "molbert": "",
+        "model": "",
+        "interactive-book": "",
+    },
+
+    // Broadcast address can be calculated with this tool: http://jodies.de/ipcalc
+    lanBroadcastAddress: "192.168.0.255"
+}
