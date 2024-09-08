@@ -8,5 +8,11 @@ export default {
     initial: "blank",
 
     // Filename of initial content. E.g., standby.jpg / standby.mp4
-    initialContent: "standby.jpg"
+    initialContent: "standby.jpg",
+
+    // Button mapping: KeyboardEvent.key -> video file
+    // List of available keys here: https://developer.mozilla.org/en-US/docs/Web/API/UI_Events/Keyboard_event_key_values
+    buttonControl: {
+        // "Tab": "video.mp4"
+    }
 };

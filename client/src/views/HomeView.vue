@@ -39,6 +39,17 @@ export default {
       console.log('Received reset command');
       this.reset();
     });
+
+    // Listen for button events to play content
+    window.addEventListener("keydown", e => {
+      if (!config.buttonControl || typeof (config.buttonControl) !== 'object')
+        return;
+
+      let videoToPlay = config.buttonControl[e.key];
+      if (videoToPlay) {
+        this.playVideo(videoToPlay);
+      }
+    });
   },
 
   mounted() {
