@@ -78,7 +78,14 @@ io.on('connect', function (socket) {
 
         // Send the same action to all connected nodes
         if (p.node.group === "broadcast") {
-            clientManager.clients.forEach(node => send(node.group, p.action, p.arg));
+            // Edge case for wakeup for disconnected nodes
+            if (p.action === "wakeup") {
+                for (let node in config.macs) {
+                    send(node, p.action, p.arg);
+                }
+            } else {
+                clientManager.clients.forEach(node => send(node.group, p.action, p.arg));
+            }
         } else {
             send(p.node.group, p.action, p.arg);
         }
