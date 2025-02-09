@@ -6,10 +6,6 @@ const config = require('./config.js');
 const {ClientManager} = require("./client_manager");
 
 const io = new Server({transports: ["websocket"]});
-
-// socket_id -> node_name mapping
-let nodesOnline = {};
-
 let clientManager = new ClientManager(io, config.scadaNode);
 
 function send(dest, action, arg) {
