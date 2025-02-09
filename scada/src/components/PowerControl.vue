@@ -1,69 +1,83 @@
 <script>
+import CollapseTransition from "@ivanv/vue-collapse-transition/src/CollapseTransition.vue";
+
 export default {
+  components: {CollapseTransition},
   props: {
     name: String,
     title: String,
     actions: {type: Array, default: []},
-    isOnline: Boolean
+    isOnline: Boolean,
+    isSelected: Boolean
   },
 
   data() {
     return {
-      systemActionsVisible: false
+      systemActionsVisible: false,
+      actionBtnClass: "grid grid-cols-1 flex-auto min-w-32 px-3 py-2 top-0 min-w-0 max-w-40 text-xs text-monospace text-wrap text-center justify-left text-black bg-gray-200 active:bg-gray-300 rounded-lg"
     }
   },
 
   methods: {
     callAction(action_name, args) {
-      this.$emit("action", this.name, action_name, args);
+      this.$emit("action", this.name, this.title, action_name, args);
     },
-
-    toggleActionsBar() {
-      this.systemActionsVisible = !this.systemActionsVisible;
-    }
   }
-
-
 }
 </script>
 
 <template>
-  <div class="absolute bg-white opacity-80 p-2 flex flex-col gap-1 rounded border-2 border-white shadow-2xl"
-       style="min-width: 3em;"
+  <div
+      class="bg-white cursor-pointer opacity-80 p-2 flex flex-col columns-3 gap-1 rounded border-2 border-white my-2 shadow-2xl"
+      style="min-width: 3em;"
   >
-
     <!-- Header -->
-    <div class="flex flex-row text-center select-none" @click="toggleActionsBar()">
+    <div class="flex flex-row" :class="isSelected ? 'mb-4' : ''">
       <span class="online-status mr-2">{{ isOnline ? "🟢" : "🔴" }}</span>
-      <h3 class="text-wrap leading-none mb-2 mx-auto">{{ this.title }}</h3>
+      <h3 class="text-wrap leading-none">{{ this.title }}</h3>
     </div>
 
-    <!-- System actions -->
-    <div class="w-full justify-center flex gap-4" v-show="systemActionsVisible">
-      <i class="fa fa-moon fa-2x action-icon" style="color: #1E3050"
-         title="Сон"
-         @click="callAction('sleep')"></i>
-      <i class="fa fa-lightbulb-o fa-2x action-icon"
-         title="Пробуждение"
-         @click="callAction('wakeup')"></i>
-      <i class="fa fa-power-off fa-2x action-icon" style="color: red"
-         title="Выключить"
-         @click="callAction('halt')"></i>
-      <i class="fa fa-refresh fa-2x action-icon" style="color: green"
-         title="Перезагрузить"
-         @click="callAction('reboot')"></i>
-    </div>
+    <!-- Actions -->
+    <collapse-transition :duration="100">
+      <div class="flex flex-row flex-wrap place-content-center text-center gap-4 whitespace-nowrap" v-show="isSelected">
+        <button type="button"
+                :class="actionBtnClass"
+                @click="callAction('halt')">
+          <i class="fa fa-power-off fa-2x action-icon text-red-600"></i>
+          Выключить
+        </button>
 
-    <!-- Content actions -->
-    <div class="w-full justify-center flex gap-4" v-show="!systemActionsVisible">
-      <i class="fa fa-2x action-icon"
-         v-for="action in actions"
-         :class="action.icon"
-         :title="action.help_text"
-         @click="callAction(action.name, action.arg)"
-      >
-      </i>
-    </div>
+        <button type="button"
+                :class="actionBtnClass"
+                @click="callAction('wakeup')">
+          <i class="fa fa-plug action-icon text-green-500"></i>
+          Включить
+        </button>
+
+        <button type="button"
+                :class="actionBtnClass"
+                @click="callAction('reboot')">
+          <i class="fa fa-undo action-icon text-orange-500"></i>
+          Перезагрузить
+        </button>
+
+        <button type="button"
+                :class="actionBtnClass"
+                @click="callAction('sleep')">
+          <i class="fa fa-moon action-icon text-blue-900"></i>
+          Спящий режим
+        </button>
+
+        <button type="button"
+                :class="actionBtnClass"
+                :key="action.name"
+                v-for="action in actions"
+                @click="callAction(action.name, action.arg)">
+          <i class="fa action-icon" :class="action.icon"></i>
+          {{ action.help_text }}
+        </button>
+      </div>
+    </collapse-transition>
   </div>
 </template>
 
@@ -79,21 +93,18 @@ h3 {
 }
 
 .action-icon {
-  background-color: transparent;
-  transition: all 0.1s ease-in-out;
   font-size: 1.5rem;
   text-align: center;
+
+  margin-top: auto;
+  margin-bottom: auto;
 }
 
-@media (hover: hover) {
-  .action-icon:hover {
-    font-size: 2rem;
-    transition: 0.1s;
-  }
+button {
+  transition: all 0.1s ease-in-out;
 }
 
-.action-icon:active {
-  background-color: gray;
+button:active {
   transition: 0.1s;
 }
 </style>

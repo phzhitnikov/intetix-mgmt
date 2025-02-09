@@ -1,5 +1,4 @@
 @echo off
 
-call npm run build
-start npx serve dist
+start node app.js
 exit
